@@ -2,37 +2,72 @@
     <title>Check Weather in your city</title>
 <%end%>
 
-<%= form_tag weather_index_path, :method => 'get' do %>
-  <p>
-    <%= text_field_tag :city_id, params[:city_id], placeholder: "Search Your City" , autocomplete: "off"%>
-    <%= hidden_field_tag :city_name, params[:city_name], placeholder: "Search Your City" , autocomplete: "off"%>
-    <%= submit_tag "Search", :name => nil %>
-  </p>
-<% end %>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+<div class="wrapper">
+    <div class="row">
+        <div class="col-sm-12">
+            <%= form_tag weather_index_path, :method => 'get' do %>
+              <p>
+                <label for="city_id">City Name:</label>
+                <%= text_field_tag :city_id, params[:city_id], placeholder: "Search Your City" , autocomplete: "off"%>
+                <%= hidden_field_tag :city_name, params[:city_name], placeholder: "Search Your City" , autocomplete: "off"%>
+                <%= submit_tag "Search", :name => nil, class: 'btn btn-primary' %>
+              </p>
+            <% end %>
 
 
-<%if @weather_info.present?%>
-    <%=@weather_info%>
-<%end%>
-<script type="text/javascript">
-    $(function(){
-        $("#city_id").tokenInput("<%=cities_autocomplete_path%>", 
-            {
-                'tokenLimit' : 1, 
-                'hintText' : 'Search Your City',
-                'noResultsText':'No Cities matching your search',
-                theme: "facebook", 
-                preventDuplicates: true,
-                onResult: function (item) {
-                    if($.isEmptyObject(item)){
-                        return [{id:'0',name: $("tester").text()}]
-                    }else{
-                        return item
-                    }
-                },
-                onAdd: function (item) {
-                    $("#city_name").val(item.name);
-                }
-            });
-    });
-</script>
+            <%if @weather_infos.present?%>
+                <%if @weather_infos[:errors].count > 0%>
+                    <span class="text-danger"><%=@weather_infos[:errors].join(", ")%></span>
+                <%else%>
+                    <h4>Weather Forecast for <%=@weather_infos[:city_name]%></h4>
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <th>Date-Time</th>
+                            <th>Temprature</th>
+                            <th>Humidity</th>
+                            <th>Wind Speed</th>
+                            <th>More Info</th>
+                        </thead>
+                        <tbody>
+                            <%@weather_infos[:weather_infos].each do |weather_info|%>
+                                <tr>
+                                    <td><%=weather_info[:datetime]%></td>
+                                    <%metric = weather_info[:temp][:metric]%>
+                                    <td><%=weather_info[:temp][:curr].round(1)%><%=metric%></td>
+                                    <td><%=weather_info[:humidity]%>%</td>
+                                    <td><%=weather_info[:more_info][:wind_speed]%></td>
+                                    <td><img src="http://openweathermap.org/img/w/<%=weather_info[:more_info][:weather_icon]%>.png"/><%=weather_info[:more_info][:description]%></td>
+                                </tr>
+                            <%end%>
+                        </tbody>
+                    </table>
+                <%end%>
+            <%end%>
+
+            <script type="text/javascript">
+                $(function(){
+                    $("#city_id").tokenInput("<%=cities_autocomplete_path%>", 
+                        {
+                            'tokenLimit' : 1, 
+                            placeholder: 'Start typing your city..',
+                            'hintText' : 'Start typing your city..',
+                            'noResultsText':'No Cities matching your search',
+                            theme: "facebook", 
+                            preventDuplicates: true,
+                            onResult: function (item) {
+                                if($.isEmptyObject(item)){
+                                    return [{id:'0',name: $("tester").text()}]
+                                }else{
+                                    return item
+                                }
+                            },
+                            onAdd: function (item) {
+                                $("#city_name").val(item.name);
+                            }
+                        });
+                });
+            </script>
+        </div>
+    </div>
+</div>
