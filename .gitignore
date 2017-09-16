@@ -1,0 +1,27 @@
+/tmp
+/log
+/db/backups
+/.idea
+/.DS_store
+Gemfile.lock
+dump.rdb
+# Ignore public assets in production
+public/assets/
+public/sw.js
+public/sitemap*.*
+/coverage
+# Ignore application configuration
+/config/application.yml
+/config/database.yml
+/config/newrelic.yml
+/config/secrets.yml
+/config/mongo.yml
+dump.rdb
+**/.DS_Store
+.byebug_history
+node_modules
+npm-debug.log
+# Ignore private files
+private/*.txt
+private/*.json
+private/*.csv
