@@ -22,6 +22,3 @@ dump.rdb
 node_modules
 npm-debug.log
 # Ignore private files
-private/*.txt
-private/*.json
-private/*.csv

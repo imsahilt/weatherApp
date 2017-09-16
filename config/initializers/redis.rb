@@ -1,0 +1,1 @@
+$redis = Redis.new(host: WeatherAppConfig.REDIS_HOST, port: WeatherAppConfig.REDIS_PORT, db: 15)
