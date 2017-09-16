@@ -25,11 +25,13 @@
                 preventDuplicates: true,
                 onResult: function (item) {
                     if($.isEmptyObject(item)){
-                        $("#city_name").val($("tester").text());
                         return [{id:'0',name: $("tester").text()}]
                     }else{
-                          return item
+                        return item
                     }
+                },
+                onAdd: function (item) {
+                    $("#city_name").val(item.name);
                 }
             });
     });
