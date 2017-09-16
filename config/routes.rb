@@ -7,4 +7,5 @@ Rails.application.routes.draw do
   namespace :cities do
     get :autocomplete
   end
+  root to: 'weather#index'
 end
