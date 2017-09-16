@@ -1,0 +1,36 @@
+<% content_for :head do %>
+    <title>Check Weather in your city</title>
+<%end%>
+
+<%= form_tag weather_index_path, :method => 'get' do %>
+  <p>
+    <%= text_field_tag :city_id, params[:city_id], placeholder: "Search Your City" , autocomplete: "off"%>
+    <%= hidden_field_tag :city_name, params[:city_name], placeholder: "Search Your City" , autocomplete: "off"%>
+    <%= submit_tag "Search", :name => nil %>
+  </p>
+<% end %>
+
+
+<%if @weather_info.present?%>
+    <%=@weather_info%>
+<%end%>
+<script type="text/javascript">
+    $(function(){
+        $("#city_id").tokenInput("<%=cities_autocomplete_path%>", 
+            {
+                'tokenLimit' : 1, 
+                'hintText' : 'Search Your City',
+                'noResultsText':'No Cities matching your search',
+                theme: "facebook", 
+                preventDuplicates: true,
+                onResult: function (item) {
+                    if($.isEmptyObject(item)){
+                        $("#city_name").val($("tester").text());
+                        return [{id:'0',name: $("tester").text()}]
+                    }else{
+                          return item
+                    }
+                }
+            });
+    });
+</script>
